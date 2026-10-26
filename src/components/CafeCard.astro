@@ -9,10 +9,21 @@ interface Props {
 }
 
 const { nombre, origen, notas, tueste, precio } = Astro.props;
+
+const imagenes: Record<string, string> = {
+  'Etiopía': '/images/Etiopia.png',
+  'Colombia': '/images/Colombia.png',
+  'Brasil': '/images/Brasil.png',
+  'Guatemala': '/images/Guatemala.png',
+};
+
+const imagen = imagenes[nombre] ?? '/images/TuesteNorte.png';
 ---
 
 <article class="cafe-card">
-  <div class="cafe-image" aria-hidden="true">☕</div>
+  <div class="cafe-image">
+    <img src={imagen} alt={`Café de ${nombre} - ${origen}`} loading="lazy" />
+  </div>
 
   <div class="cafe-info">
     <p class="cafe-origin">{origen}</p>
@@ -41,11 +52,17 @@ const { nombre, origen, notas, tueste, precio } = Astro.props;
   }
 
   .cafe-image {
-    display: grid;
-    min-height: 180px;
-    place-items: center;
+    height: 220px;
+    overflow: hidden;
     background: #f5e9d8;
-    font-size: 64px;
+  }
+
+  .cafe-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .cafe-info {

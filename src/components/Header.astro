@@ -1,8 +1,8 @@
 
 <header class="site-header">
   <nav class="site-nav">
-    <a href="/" class="brand">
-      Tueste Norte<span>.</span>
+    <a href="/" class="brand" aria-label="Tueste Norte, inicio">
+      <img src="/images/TuesteNorte.png" alt="Tueste Norte" />
     </a>
 
     <div class="nav-links">
@@ -35,17 +35,17 @@
   }
 
   .brand {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
-    white-space: nowrap;
-    color: #78350f;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
     text-decoration: none;
   }
 
-  .brand span {
-    color: #d97706;
+  .brand img {
+    display: block;
+    width: 180px;
+    height: 70px;
+    object-fit: contain;
   }
 
   .nav-links {

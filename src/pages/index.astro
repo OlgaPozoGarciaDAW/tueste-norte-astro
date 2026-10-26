@@ -53,8 +53,12 @@ const cafes = [
       </div>
     </div>
 
-    <div class="hero-decoration" aria-hidden="true">
-      <span>☕</span>
+    <div class="hero-decoration">
+      <img
+        src="/images/taza-cafe.png"
+        alt="Taza de café recién preparado rodeada de granos de café"
+        loading="eager"
+      />
       <p>Del origen<br />a tu taza</p>
     </div>
   </section>
@@ -184,18 +188,25 @@ const cafes = [
 
   .hero-decoration {
     display: flex;
-    min-height: 240px;
+    min-height: 340px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     border: 1px solid #a16236;
     border-radius: 28px;
     background: #92400e;
     text-align: center;
+    padding: 20px;
   }
 
-  .hero-decoration span {
-    font-size: 100px;
+  .hero-decoration img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: 230px;
+    object-fit: contain;
+    border-radius: 16px;
   }
 
   .hero-decoration p {
@@ -330,12 +341,3 @@ const cafes = [
     }
   }
 </style>
-```
-
-### Comprueba el resultado
-
-1. Guarda con `Ctrl + S`.
-2. Abre **[http://localhost:4321/](http://localhost:4321/)**.
-3. Comprueba que aparece la portada marrón, los botones, la presentación y las cuatro tarjetas de café.
-
-He reutilizado `BaseLayout.astro` y `CafeCard.astro` para que la página principal mantenga el mismo diseño que las demás. **Cuando la tengas abierta, pásame una captura** y revisamos el resultado antes de seguir. 🌱
