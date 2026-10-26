@@ -1,0 +1,133 @@
+
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CafeCard from '../components/CafeCard.astro';
+
+const cafes = [
+  {
+    nombre: 'Etiopía',
+    origen: 'Yirgacheffe, Etiopía',
+    notas: 'Frutos rojos, jazmín y cítricos.',
+    tueste: 'Claro',
+    precio: 12.50
+  },
+  {
+    nombre: 'Colombia',
+    origen: 'Huila, Colombia',
+    notas: 'Chocolate, caramelo y frutos secos.',
+    tueste: 'Medio',
+    precio: 11.90
+  },
+  {
+    nombre: 'Brasil',
+    origen: 'Minas Gerais, Brasil',
+    notas: 'Chocolate con leche, avellana y caramelo.',
+    tueste: 'Oscuro',
+    precio: 10.90
+  },
+  {
+    nombre: 'Guatemala',
+    origen: 'Antigua, Guatemala',
+    notas: 'Cacao, naranja y especias suaves.',
+    tueste: 'Medio',
+    precio: 12.20
+  }
+] as const;
+---
+
+<BaseLayout title="Catálogo | Tueste Norte">
+  <section class="catalog-hero">
+    <p class="catalog-eyebrow">Nuestra selección</p>
+    <h1>Encuentra tu próximo café favorito.</h1>
+    <p>
+      Cuatro orígenes, cuatro perfiles diferentes y una misma pasión por el café.
+    </p>
+  </section>
+
+  <section class="catalog-section">
+    <div class="catalog-heading">
+      <h2>Nuestros cafés</h2>
+      <p>Descubre sus aromas, notas y perfiles de tueste.</p>
+    </div>
+
+    <div class="catalog-grid">
+      {cafes.map((cafe) => (
+        <CafeCard {...cafe} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .catalog-hero {
+    padding: 72px 24px;
+    background: #78350f;
+    color: white;
+    text-align: center;
+  }
+
+  .catalog-eyebrow {
+    margin-bottom: 16px;
+    color: #fcd34d;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .catalog-hero h1 {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: clamp(34px, 5vw, 54px);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .catalog-hero > p:last-child {
+    max-width: 650px;
+    margin: 20px auto 0;
+    color: #fef3c7;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .catalog-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 24px 80px;
+  }
+
+  .catalog-heading {
+    margin-bottom: 36px;
+    text-align: center;
+  }
+
+  .catalog-heading h2 {
+    color: #292524;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .catalog-heading p {
+    margin-top: 10px;
+    color: #57534e;
+  }
+
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .catalog-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .catalog-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

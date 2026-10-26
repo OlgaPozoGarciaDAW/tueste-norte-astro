@@ -1,0 +1,99 @@
+
+---
+interface Props {
+  nombre: string;
+  origen: string;
+  notas: string;
+  tueste: 'Claro' | 'Medio' | 'Oscuro';
+  precio: number;
+}
+
+const { nombre, origen, notas, tueste, precio } = Astro.props;
+---
+
+<article class="cafe-card">
+  <div class="cafe-image" aria-hidden="true">☕</div>
+
+  <div class="cafe-info">
+    <p class="cafe-origin">{origen}</p>
+    <h2>{nombre}</h2>
+    <p class="cafe-notes">{notas}</p>
+
+    <div class="cafe-bottom">
+      <span class="cafe-roast">Tueste {tueste.toLowerCase()}</span>
+      <span class="cafe-price">{precio.toFixed(2).replace('.', ',')} €</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .cafe-card {
+    overflow: hidden;
+    border: 1px solid #e7e5e4;
+    border-radius: 18px;
+    background: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .cafe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgb(68 40 20 / 10%);
+  }
+
+  .cafe-image {
+    display: grid;
+    min-height: 180px;
+    place-items: center;
+    background: #f5e9d8;
+    font-size: 64px;
+  }
+
+  .cafe-info {
+    padding: 24px;
+  }
+
+  .cafe-origin {
+    margin-bottom: 8px;
+    color: #92400e;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cafe-info h2 {
+    color: #292524;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .cafe-notes {
+    min-height: 52px;
+    margin-top: 12px;
+    color: #57534e;
+    line-height: 1.7;
+  }
+
+  .cafe-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .cafe-roast {
+    border-radius: 999px;
+    background: #f5f5f4;
+    padding: 7px 12px;
+    color: #57534e;
+    font-size: 13px;
+  }
+
+  .cafe-price {
+    color: #78350f;
+    font-size: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+</style>

@@ -1,0 +1,341 @@
+
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CafeCard from '../components/CafeCard.astro';
+
+const cafes = [
+  {
+    nombre: 'Etiopía',
+    origen: 'Yirgacheffe, Etiopía',
+    notas: 'Frutos rojos, jazmín y cítricos.',
+    tueste: 'Claro',
+    precio: 12.50
+  },
+  {
+    nombre: 'Colombia',
+    origen: 'Huila, Colombia',
+    notas: 'Chocolate, caramelo y frutos secos.',
+    tueste: 'Medio',
+    precio: 11.90
+  },
+  {
+    nombre: 'Brasil',
+    origen: 'Minas Gerais, Brasil',
+    notas: 'Chocolate con leche, avellana y caramelo.',
+    tueste: 'Oscuro',
+    precio: 10.90
+  },
+  {
+    nombre: 'Guatemala',
+    origen: 'Antigua, Guatemala',
+    notas: 'Cacao, naranja y especias suaves.',
+    tueste: 'Medio',
+    precio: 12.20
+  }
+] as const;
+---
+
+<BaseLayout title="Tueste Norte | Café de especialidad">
+  <section class="home-hero">
+    <div class="hero-content">
+      <p class="eyebrow">Café de especialidad</p>
+
+      <h1>Un buen café.<br />Un origen extraordinario.</h1>
+
+      <p class="hero-description">
+        Descubre cafés seleccionados por su origen, sus aromas
+        y sus matices. Encuentra la variedad que encaja contigo.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/catalogo" class="button-primary">Descubrir nuestros cafés</a>
+        <a href="/quienes-somos" class="button-secondary">Nuestra historia</a>
+      </div>
+    </div>
+
+    <div class="hero-decoration" aria-hidden="true">
+      <span>☕</span>
+      <p>Del origen<br />a tu taza</p>
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <p class="eyebrow">Nuestra filosofía</p>
+    <h2>Cada café tiene una historia que contar.</h2>
+    <p>
+      En Tueste Norte creemos que disfrutar del café empieza mucho antes
+      del primer sorbo. Por eso seleccionamos variedades con personalidad
+      y te acercamos todo lo que hace especial a cada origen.
+    </p>
+    <a href="/quienes-somos" class="text-link">Conoce nuestra historia →</a>
+  </section>
+
+  <section class="featured-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Seleccionados para ti</p>
+        <h2>Nuestros cafés</h2>
+        <p>Cuatro orígenes, cuatro formas de disfrutar.</p>
+      </div>
+
+      <a href="/catalogo" class="text-link">Ver catálogo completo →</a>
+    </div>
+
+    <div class="featured-grid">
+      {cafes.map((cafe) => (
+        <CafeCard {...cafe} />
+      ))}
+    </div>
+  </section>
+
+  <section class="closing-section">
+    <p class="eyebrow">Tu próximo café favorito</p>
+    <h2>Los pequeños detalles hacen la diferencia.</h2>
+    <p>
+      Explora nuestros orígenes y descubre nuevos aromas y sabores.
+    </p>
+    <a href="/catalogo" class="button-primary">Explorar cafés</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 40px;
+    padding: 72px 24px;
+    background: #78350f;
+    color: white;
+  }
+
+  .hero-content {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin-bottom: 16px;
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .home-hero .eyebrow,
+  .closing-section .eyebrow {
+    color: #fcd34d;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(38px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-description {
+    max-width: 570px;
+    margin-top: 24px;
+    color: #fef3c7;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+  }
+
+  .button-primary,
+  .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .button-primary {
+    background: #fcd34d;
+    color: #451a03;
+  }
+
+  .button-primary:hover {
+    background: #fde68a;
+    transform: translateY(-2px);
+  }
+
+  .button-secondary {
+    border: 1px solid #d6b9a3;
+    color: white;
+  }
+
+  .button-secondary:hover {
+    background: #92400e;
+  }
+
+  .hero-decoration {
+    display: flex;
+    min-height: 240px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a16236;
+    border-radius: 28px;
+    background: #92400e;
+    text-align: center;
+  }
+
+  .hero-decoration span {
+    font-size: 100px;
+  }
+
+  .hero-decoration p {
+    margin-top: 12px;
+    color: #fef3c7;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .intro-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    text-align: center;
+  }
+
+  .intro-section h2,
+  .section-heading h2,
+  .closing-section h2 {
+    color: #292524;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 750;
+    line-height: 1.2;
+  }
+
+  .intro-section > p:not(.eyebrow) {
+    margin-top: 20px;
+    color: #57534e;
+    line-height: 1.9;
+  }
+
+  .text-link {
+    color: #92400e;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .text-link:hover {
+    color: #b45309;
+    text-decoration: underline;
+  }
+
+  .intro-section .text-link {
+    display: inline-block;
+    margin-top: 24px;
+  }
+
+  .featured-section {
+    padding: 72px 24px;
+    background: #fafaf9;
+  }
+
+  .section-heading {
+    display: flex;
+    max-width: 1200px;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 0 auto 36px;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 12px;
+  }
+
+  .section-heading p:not(.eyebrow) {
+    color: #57534e;
+  }
+
+  .section-heading > .text-link {
+    margin-top: 8px;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .closing-section {
+    padding: 72px 24px;
+    background: #292524;
+    color: white;
+    text-align: center;
+  }
+
+  .closing-section h2 {
+    max-width: 750px;
+    margin: 0 auto;
+    color: white;
+  }
+
+  .closing-section > p:not(.eyebrow) {
+    margin: 20px auto 28px;
+    color: #d6d3d1;
+    line-height: 1.8;
+  }
+
+  @media (min-width: 768px) {
+    .home-hero {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      padding: 100px max(48px, calc((100% - 1200px) / 2));
+    }
+
+    .hero-content {
+      margin: 0;
+    }
+
+    .hero-decoration {
+      min-height: 340px;
+    }
+
+    .section-heading {
+      flex-direction: row;
+      align-items: end;
+      justify-content: space-between;
+    }
+
+    .featured-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .featured-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
+```
+
+### Comprueba el resultado
+
+1. Guarda con `Ctrl + S`.
+2. Abre **[http://localhost:4321/](http://localhost:4321/)**.
+3. Comprueba que aparece la portada marrón, los botones, la presentación y las cuatro tarjetas de café.
+
+He reutilizado `BaseLayout.astro` y `CafeCard.astro` para que la página principal mantenga el mismo diseño que las demás. **Cuando la tengas abierta, pásame una captura** y revisamos el resultado antes de seguir. 🌱

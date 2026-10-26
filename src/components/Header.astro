@@ -1,0 +1,94 @@
+
+<header class="site-header">
+  <nav class="site-nav">
+    <a href="/" class="brand">
+      Tueste Norte<span>.</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/quienes-somos">Quiénes somos</a>
+      <a href="/catalogo">Catálogo</a>
+      <a href="/contacto">Contacto</a>
+      <a href="/blog/">Blog</a>
+      <a href="/avisos" class="nav-button">Avisos</a>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #e7e5e4;
+  }
+
+  .site-nav {
+    width: 100%;
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .brand {
+    flex-shrink: 0;
+    white-space: nowrap;
+    color: #78350f;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .brand span {
+    color: #d97706;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .nav-links a {
+    color: #44403c;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: #92400e;
+  }
+
+  .nav-links .nav-button {
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #78350f;
+    color: #fff;
+  }
+
+  .nav-links .nav-button:hover {
+    background: #92400e;
+  }
+
+  @media (max-width: 760px) {
+    .site-nav {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 18px;
+    }
+  }
+</style>

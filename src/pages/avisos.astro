@@ -1,0 +1,83 @@
+
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+// Prueba de validación: al quitar el campo obligatorio "titulo" de novedades-cafe.md,
+// Astro detectó datos no válidos en la entrada (INVALID_CONTENT_ENTRY_DATA_ERROR).
+// Ubicación del error: src/content/avisos/novedades-cafe.md:0:0.
+
+const avisos = await getCollection('avisos');
+
+const avisosConContenido = await Promise.all(
+  avisos.map(async (aviso) => {
+    const { Content } = await render(aviso);
+    return {
+      ...aviso,
+      Content
+    };
+  })
+);
+
+avisosConContenido.sort((a, b) => {
+  return b.data.fecha.getTime() - a.data.fecha.getTime();
+});
+---
+
+<BaseLayout title="Avisos | Tueste Norte">
+  <section class="mx-auto max-w-5xl px-6 py-16 md:py-20">
+    <p class="mb-3 text-sm font-bold uppercase tracking-widest text-amber-800">
+      Novedades
+    </p>
+
+    <h1 class="text-4xl font-bold text-stone-900">
+      Avisos de Tueste Norte
+    </h1>
+
+    <p class="mt-4 text-lg leading-8 text-stone-600">
+      Noticias, consejos e información sobre nuestros cafés de especialidad.
+    </p>
+
+    <div class="mt-10 space-y-6">
+      {avisosConContenido.map((aviso) => (
+        <article
+          class:list={[
+            'rounded-2xl border p-6 md:p-8',
+            aviso.data.importante
+              ? 'border-amber-400 bg-amber-50'
+              : 'border-stone-200 bg-white'
+          ]}
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <time
+              datetime={aviso.data.fecha.toISOString()}
+              class="text-sm text-stone-500"
+            >
+              {aviso.data.fecha.toLocaleDateString('es-ES')}
+            </time>
+
+            {aviso.data.importante && (
+              <span class="rounded-full bg-amber-900 px-3 py-1 text-xs font-bold text-white">
+                Importante
+              </span>
+            )}
+          </div>
+
+          <h2 class="mt-4 text-2xl font-bold text-amber-900">
+            {aviso.data.titulo}
+          </h2>
+
+          <div class="mt-4 leading-7 text-stone-700">
+            <aviso.Content />
+          </div>
+        </article>
+      ))}
+    </div>
+
+    {avisosConContenido.length === 0 && (
+      <p class="mt-10 rounded-xl bg-white p-6 text-stone-600">
+        Todavía no hay avisos publicados.
+      </p>
+    )}
+  </section>
+</BaseLayout>

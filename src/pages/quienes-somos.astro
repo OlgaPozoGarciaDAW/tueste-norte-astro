@@ -1,0 +1,194 @@
+
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Quiénes somos | Tueste Norte">
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Nuestra historia</p>
+      <h1>El café es mucho más que una taza.</h1>
+      <p class="hero-description">
+        En Tueste Norte creemos que cada café cuenta una historia:
+        la de su origen, las personas que lo cultivan y el cuidado
+        con el que llega hasta tu taza.
+      </p>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="story-content">
+      <h2>Nuestra forma de entender el café</h2>
+      <p>
+        Seleccionamos cafés de distintos orígenes para ofrecer experiencias
+        diferentes en cada taza. Nos interesan los aromas, los matices y
+        los pequeños detalles que hacen especial a cada variedad.
+      </p>
+      <p>
+        Queremos acercar el café de especialidad a quienes disfrutan
+        descubriendo nuevos sabores, con información clara sobre cada
+        origen y su perfil de tueste.
+      </p>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="values-content">
+      <div class="values-heading">
+        <h2>Nuestros valores</h2>
+        <p>Lo que guía cada elección que hacemos.</p>
+      </div>
+
+      <div class="values-grid">
+        <article class="value-card">
+          <div class="value-icon">🌱</div>
+          <h3>Respeto al origen</h3>
+          <p>Cada región aporta características únicas que merece la pena conocer.</p>
+        </article>
+
+        <article class="value-card">
+          <div class="value-icon">☕</div>
+          <h3>Pasión por el café</h3>
+          <p>Prestamos atención a los aromas, los sabores y los perfiles de tueste.</p>
+        </article>
+
+        <article class="value-card">
+          <div class="value-icon">🤎</div>
+          <h3>Cuidado en los detalles</h3>
+          <p>Queremos que elegir y disfrutar de tu café sea una experiencia sencilla.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background-color: #78350f;
+    color: white;
+    padding: 80px 24px;
+  }
+
+.hero-content,
+.story-content,
+.values-content {
+  display: block;
+  width: 100%;
+  max-width: 1152px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+  .hero-content {
+    max-width: 850px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin-bottom: 16px;
+    color: #fcd34d;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  .hero-description {
+    max-width: 700px;
+    margin: 24px auto 0;
+    color: #fef3c7;
+    font-size: 18px;
+    line-height: 1.8;
+  }
+
+  .story {
+    padding: 64px 24px;
+    background-color: #fafaf9;
+  }
+
+  .story-content {
+    max-width: 768px;
+  }
+
+  .story h2,
+  .values h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #292524;
+  }
+
+  .story p,
+  .value-card p {
+    margin-top: 16px;
+    color: #57534e;
+    line-height: 1.8;
+  }
+
+  .values {
+    padding: 64px 24px;
+    background-color: white;
+  }
+
+  .values-heading {
+    margin-bottom: 36px;
+    text-align: center;
+  }
+
+  .values-heading h2 {
+    margin-bottom: 12px;
+  }
+
+  .values-heading p {
+    color: #57534e;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .value-card {
+    padding: 28px;
+    border: 1px solid #e7e5e4;
+    border-radius: 16px;
+    background-color: #fff;
+  }
+
+  .value-icon {
+    margin-bottom: 16px;
+    font-size: 32px;
+  }
+
+  .value-card h3 {
+    color: #78350f;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    .values-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: 56px 20px;
+    }
+
+    .story,
+    .values {
+      padding: 48px 20px;
+    }
+  }
+</style>
