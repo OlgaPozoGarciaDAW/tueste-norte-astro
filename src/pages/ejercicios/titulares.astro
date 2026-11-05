@@ -1,0 +1,50 @@
+---
+const apiUrl = import.meta.env.WP_API_URL;
+
+console.log('URL de WordPress:', apiUrl);
+
+let entradas = [];
+let error = '';
+
+try {
+  const respuesta = await fetch(`${apiUrl}/wp/v2/posts`);
+
+  if (!respuesta.ok) {
+    throw new Error(`WordPress respondió con el estado ${respuesta.status}`);
+  }
+
+  entradas = await respuesta.json();
+
+  console.log(`Número de entradas recibidas: ${entradas.length}`);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Error desconocido';
+  console.error('Error al conectar con WordPress:', error);
+}
+
+const formatearFecha = (fecha: string) => {
+  return new Date(fecha).toLocaleDateString('es-ES');
+};
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Titulares de WordPress</title>
+  </head>
+  <body>
+    <h1>Titulares de WordPress</h1>
+
+    {error ? (
+      <p>Error: {error}</p>
+    ) : (
+      <ul>
+        {entradas.map((entrada: any) => (
+          <li>
+            <strong>{entrada.title.rendered}</strong>
+            — {formatearFecha(entrada.date)}
+          </li>
+        ))}
+      </ul>
+    )}
+  </body>
+</html>

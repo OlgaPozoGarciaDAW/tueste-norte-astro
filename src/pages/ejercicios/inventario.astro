@@ -1,0 +1,34 @@
+---
+const apiUrl = import.meta.env.WP_API_URL;
+
+console.log('URL de WordPress en inventario:', apiUrl);
+
+const respuesta = await fetch(`${apiUrl}/wp/v2/cafe?per_page=3`);
+
+const totalCafes = respuesta.headers.get('X-WP-Total');
+const totalPaginas = respuesta.headers.get('X-WP-TotalPages');
+
+const cafes = await respuesta.json();
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inventario de cafés</title>
+  </head>
+  <body>
+    <h1>Inventario de cafés</h1>
+
+    <p>
+      Hay {totalCafes} cafés repartidos en {totalPaginas} páginas.
+    </p>
+
+    <h2>Primeros cafés</h2>
+
+    <ul>
+      {cafes.map((cafe: any) => (
+        <li>{cafe.title.rendered}</li>
+      ))}
+    </ul>
+  </body>
+</html>

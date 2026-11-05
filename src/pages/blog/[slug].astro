@@ -1,47 +1,73 @@
 
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { getEntradas, getEntrada } from '../../lib/wp';
 
 export async function getStaticPaths() {
-  const articulos = await getCollection('blog');
+  const articulos = await getEntradas();
 
   return articulos.map((articulo) => ({
-    params: { slug: articulo.id },
-    props: { articulo },
+    params: { slug: articulo.slug },
   }));
 }
 
-const { articulo } = Astro.props;
-const { Content } = await render(articulo);
+const slug = Astro.params.slug;
+const articulo = slug ? await getEntrada(slug) : undefined;
+
+const imagen = articulo?._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+const textoAlternativo = articulo?._embedded?.['wp:featuredmedia']?.[0]?.alt_text;
 ---
 
-<BaseLayout title={`${articulo.data.titulo} | Tueste Norte`}>
-  <article class="mx-auto max-w-3xl px-6 py-16 md:py-20">
-    <a
-      href="/blog/"
-      class="mb-8 inline-flex font-semibold text-amber-900 hover:text-amber-700"
-    >
-      ← Volver al blog
-    </a>
+{articulo ? (
+  <BaseLayout title={`${articulo.title.rendered} | Tueste Norte`}>
+    <article class="mx-auto max-w-3xl px-6 py-16 md:py-20">
+      <a
+        href="/blog/"
+        class="mb-8 inline-flex font-semibold text-amber-900 hover:text-amber-700"
+      >
+        ← Volver al blog
+      </a>
 
-    <time
-      datetime={articulo.data.fecha.toISOString()}
-      class="mt-6 block text-sm text-stone-500"
-    >
-      {articulo.data.fecha.toLocaleDateString('es-ES')}
-    </time>
+      {imagen && (
+        <img
+          src={imagen}
+          alt={textoAlternativo || articulo.title.rendered}
+          class="mt-8 w-full rounded-2xl object-cover"
+        />
+      )}
 
-    <h1 class="mt-4 text-4xl font-bold leading-tight text-stone-900 md:text-5xl">
-      {articulo.data.titulo}
-    </h1>
+      <time
+        datetime={articulo.date}
+        class="mt-6 block text-sm text-stone-500"
+      >
+        {new Date(articulo.date).toLocaleDateString('es-ES')}
+      </time>
 
-    <p class="mt-6 text-lg leading-8 text-stone-600">
-      {articulo.data.descripcion}
-    </p>
+      <h1
+        class="mt-4 text-4xl font-bold leading-tight text-stone-900 md:text-5xl"
+        set:html={articulo.title.rendered}
+      />
 
-    <div class="prose prose-stone mt-10 max-w-none leading-8">
-      <Content />
-    </div>
-  </article>
-</BaseLayout>
+      <div
+        class="mt-6 text-lg leading-8 text-stone-600"
+        set:html={articulo.excerpt.rendered}
+      />
+
+      <div
+        class="prose prose-stone mt-10 max-w-none leading-8"
+        set:html={articulo.content.rendered}
+      />
+    </article>
+  </BaseLayout>
+) : (
+  <BaseLayout title="Artículo no encontrado | Tueste Norte">
+    <main class="mx-auto max-w-3xl px-6 py-20 text-center">
+      <h1 class="text-3xl font-bold text-stone-900">
+        Artículo no encontrado
+      </h1>
+      <a href="/blog/" class="mt-6 inline-block font-semibold text-amber-900">
+        Volver al blog
+      </a>
+    </main>
+  </BaseLayout>
+)}

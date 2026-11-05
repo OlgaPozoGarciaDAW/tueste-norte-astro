@@ -1,38 +1,18 @@
-
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CafeCard from '../components/CafeCard.astro';
+import { getCafes } from '../lib/wp';
 
-const cafes = [
-  {
-    nombre: 'Etiopía',
-    origen: 'Yirgacheffe, Etiopía',
-    notas: 'Frutos rojos, jazmín y cítricos.',
-    tueste: 'Claro',
-    precio: 12.50
-  },
-  {
-    nombre: 'Colombia',
-    origen: 'Huila, Colombia',
-    notas: 'Chocolate, caramelo y frutos secos.',
-    tueste: 'Medio',
-    precio: 11.90
-  },
-  {
-    nombre: 'Brasil',
-    origen: 'Minas Gerais, Brasil',
-    notas: 'Chocolate con leche, avellana y caramelo.',
-    tueste: 'Oscuro',
-    precio: 10.90
-  },
-  {
-    nombre: 'Guatemala',
-    origen: 'Antigua, Guatemala',
-    notas: 'Cacao, naranja y especias suaves.',
-    tueste: 'Medio',
-    precio: 12.20
-  }
-] as const;
+const cafes = await getCafes();
+
+const catalogo = cafes.map((cafe) => ({
+  nombre: cafe.title.rendered,
+  origen: cafe.acf.origen,
+  notas: cafe.acf.notas_de_cata,
+  tueste: cafe.acf.nivel_de_tueste,
+  precio: cafe.acf.precio,
+  imagen: cafe._embedded?.['wp:featuredmedia']?.[0]?.source_url
+}));
 ---
 
 <BaseLayout title="Catálogo | Tueste Norte">
@@ -51,7 +31,7 @@ const cafes = [
     </div>
 
     <div class="catalog-grid">
-      {cafes.map((cafe) => (
+      {catalogo.map((cafe) => (
         <CafeCard {...cafe} />
       ))}
     </div>

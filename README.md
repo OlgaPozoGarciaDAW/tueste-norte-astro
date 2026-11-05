@@ -1,63 +1,101 @@
 # Tueste Norte ☕
 
-Web pública de Tueste Norte, un tostadero de café de especialidad. Desarrollada con **Astro y Tailwind CSS**, con páginas estáticas para ofrecer una navegación rápida y una experiencia adaptable a móviles, tabletas y ordenadores.
+Web pública de Tueste Norte, un tostadero de café de especialidad. Desarrollada con **Astro, Tailwind CSS y WordPress**, utilizando la API REST de WordPress para gestionar los cafés y los artículos del blog.
 
 ## Características
 
 - Portada de Tueste Norte.
-- Página «Quiénes somos» con la historia y los valores del tostadero.
-- Catálogo de cafés de especialidad de Etiopía, Colombia, Brasil y Guatemala.
-- Página de contacto con la información de la tienda.
-- Blog con artículos en Markdown sobre recetas y métodos de preparación.
-- Colecciones de contenido para el blog y los avisos.
+- Página «Quiénes somos».
+- Catálogo dinámico de cafés de especialidad: Etiopía, Colombia, Brasil y Guatemala.
+- Fichas individuales de cada café.
+- Página de contacto.
+- Blog conectado a WordPress con listado y páginas individuales de artículos.
+- Avisos gestionados mediante colecciones de contenido de Astro.
 - Componentes reutilizables: `Header`, `Footer`, `CafeCard` y `BaseLayout`.
-- Diseño responsive con Tailwind CSS.
+- Diseño responsive para móviles, tabletas y ordenadores.
 
 ## Tecnologías
 
 - [Astro](https://astro.build/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- Colecciones de contenido de Astro con esquemas de validación.
+- WordPress.
+- API REST de WordPress.
+- TypeScript.
+- Node.js.
 
 ## Requisitos
 
-Tener Node.js y npm instalados.
+- Node.js instalado.
+- npm instalado.
+- XAMPP con Apache y MySQL.
+- WordPress instalado y funcionando.
 
 ## Instalación y ejecución
 
-Clona el repositorio y entra en la carpeta del proyecto. Después, ejecuta:
+Clonar el repositorio y entrar en la carpeta del proyecto.
+
+Instalar las dependencias:
 
 ```bash
 npm install
+```
+
+Crear el archivo `.env` a partir de `.env.example` y configurar la dirección de la API REST de WordPress:
+
+```env
+WP_API_URL=http://localhost/tueste-norte-wp/wp-json
+```
+
+Iniciar el servidor de desarrollo:
+
+```bash
 npm run dev
 ```
 
-Abre la dirección local que indique Astro en la terminal, normalmente `http://localhost:4321`.
+Abrir la dirección local indicada por Astro, normalmente `http://localhost:4321`.
 
-## Compilación y vista previa
+## Compilación y ejecución en producción
 
-Para generar la web estática de producción:
+Generar la versión de producción:
 
 ```bash
 npm run build
 ```
 
-Para comprobar localmente la versión generada:
+Iniciar el servidor Node:
 
 ```bash
-npm run preview
+node ./dist/server/entry.mjs
 ```
 
-## Organización del contenido
+## Organización del proyecto
 
-Los artículos del blog y los avisos se guardan en archivos Markdown dentro de `src/content/blog/` y `src/content/avisos/`. Astro valida sus datos mediante los esquemas definidos en `src/content.config.ts`.
+- `src/components/`: componentes reutilizables.
+- `src/layouts/`: estructura general de las páginas.
+- `src/pages/`: páginas y rutas dinámicas.
+- `src/lib/wp.ts`: conexión con WordPress y funciones para obtener cafés y artículos.
+- `src/content/avisos/`: avisos en formato Markdown.
+- `public/images/`: imágenes y recursos estáticos.
+- `.env`: configuración local de la API de WordPress.
+- `.env.example`: ejemplo de configuración.
 
-Los datos del catálogo de cafés se mantienen localmente en el proyecto, sin conexión a la API de WordPress, tal como requiere esta fase del encargo.
+Los cafés y artículos se obtienen desde WordPress mediante su API REST. Los avisos continúan gestionándose mediante colecciones de contenido de Astro.
 
-## Generación estática
+## Decisión de renderizado
 
-Astro genera las páginas HTML durante la compilación. Esto reduce el trabajo que debe realizar el servidor al recibir visitas y favorece una carga rápida, algo importante ante el aumento de tráfico previsto por el reportaje gastronómico.
+El proyecto utiliza renderizado en servidor (SSR) mediante Astro y el adaptador Node.
+Los datos de cafés y artículos se obtienen desde la API REST de WordPress.
+Las páginas solicitan los datos a WordPress durante la petición.
+Cuando Marta publica un nuevo café, estará disponible sin reconstruir Astro.
+Lo mismo ocurre con los nuevos artículos del blog.
+Esta estrategia permite mantener el contenido actualizado.
+No es necesario generar de nuevo la web por cada cambio de contenido.
+El proyecto necesita un servidor compatible con Node.js para funcionar.
+El alojamiento puede tener un coste superior al de una web estática.
+También requiere mantener disponible el servidor de WordPress.
+Si WordPress deja de funcionar, las peticiones a su API pueden fallar.
+Por tanto, la disponibilidad de la web depende también de WordPress.
 
 ## Estado del proyecto
 
-Esta entrega corresponde a la versión estática de la web pública. La integración con WordPress queda fuera del alcance de esta fase.
+La web pública está conectada con WordPress para gestionar dinámicamente el catálogo de cafés y el blog. Las páginas mantienen el diseño responsive y los componentes reutilizables desarrollados durante las fases anteriores.

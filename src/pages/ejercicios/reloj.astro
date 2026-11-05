@@ -1,0 +1,22 @@
+---
+export const prerender = true;
+
+const horaActual = new Date().toLocaleTimeString('es-ES');
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reloj SSR</title>
+  </head>
+  <body>
+    <h1>Reloj del servidor</h1>
+    <p>Hora actual: {horaActual}</p>
+  </body>
+</html>
+
+// Con SSR, el código se ejecuta en cada petición y genera una hora nueva.
+// Con SSG, el código se ejecuta durante la compilación.
+// La hora queda guardada en el HTML generado.
+// Por eso, al recargar una página prerenderizada, la hora no cambia.
+// Para actualizarla sería necesario volver a generar la página.
