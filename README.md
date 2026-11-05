@@ -1,3 +1,4 @@
+
 # Tueste Norte ☕
 
 Web pública de Tueste Norte, un tostadero de café de especialidad. Desarrollada con **Astro, Tailwind CSS y WordPress**, utilizando la API REST de WordPress para gestionar los cafés y los artículos del blog.
@@ -11,6 +12,7 @@ Web pública de Tueste Norte, un tostadero de café de especialidad. Desarrollad
 - Página de contacto.
 - Blog conectado a WordPress con listado y páginas individuales de artículos.
 - Avisos gestionados mediante colecciones de contenido de Astro.
+- Ejercicios de conexión con la API REST y renderizado del reloj.
 - Componentes reutilizables: `Header`, `Footer`, `CafeCard` y `BaseLayout`.
 - Diseño responsive para móviles, tabletas y ordenadores.
 
@@ -46,6 +48,8 @@ Crear el archivo `.env` a partir de `.env.example` y configurar la dirección de
 WP_API_URL=http://localhost/tueste-norte-wp/wp-json
 ```
 
+Iniciar Apache y MySQL desde XAMPP y comprobar que WordPress está funcionando.
+
 Iniciar el servidor de desarrollo:
 
 ```bash
@@ -56,7 +60,7 @@ Abrir la dirección local indicada por Astro, normalmente `http://localhost:4321
 
 ## Compilación y ejecución en producción
 
-Generar la versión de producción:
+Con WordPress funcionando, generar la versión de producción:
 
 ```bash
 npm run build
@@ -73,6 +77,7 @@ node ./dist/server/entry.mjs
 - `src/components/`: componentes reutilizables.
 - `src/layouts/`: estructura general de las páginas.
 - `src/pages/`: páginas y rutas dinámicas.
+- `src/pages/ejercicios/`: ejercicios de la actividad.
 - `src/lib/wp.ts`: conexión con WordPress y funciones para obtener cafés y artículos.
 - `src/content/avisos/`: avisos en formato Markdown.
 - `public/images/`: imágenes y recursos estáticos.
@@ -85,8 +90,8 @@ Los cafés y artículos se obtienen desde WordPress mediante su API REST. Los av
 
 El proyecto utiliza renderizado en servidor (SSR) mediante Astro y el adaptador Node.
 Los datos de cafés y artículos se obtienen desde la API REST de WordPress.
-Las páginas solicitan los datos a WordPress durante la petición.
-Cuando Marta publica un nuevo café, estará disponible sin reconstruir Astro.
+Las páginas solicitan los datos a WordPress durante cada petición.
+Cuando se publica un nuevo café, estará disponible sin reconstruir Astro.
 Lo mismo ocurre con los nuevos artículos del blog.
 Esta estrategia permite mantener el contenido actualizado.
 No es necesario generar de nuevo la web por cada cambio de contenido.
