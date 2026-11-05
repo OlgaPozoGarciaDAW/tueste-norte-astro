@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CafeCard from '../components/CafeCard.astro';
@@ -5,15 +6,24 @@ import { getCafes } from '../lib/wp';
 
 const cafes = await getCafes();
 
+const normalizarTueste = (nivel: string): 'Claro' | 'Medio' | 'Oscuro' => {
+  const valor = nivel.toLowerCase();
+
+  if (valor === 'claro') return 'Claro';
+  if (valor === 'oscuro') return 'Oscuro';
+  return 'Medio';
+};
+
 const catalogo = cafes.map((cafe) => ({
-  nombre: cafe.title.rendered,
-  origen: cafe.acf.origen,
-  notas: cafe.acf.notas_de_cata,
-  tueste: cafe.acf.nivel_de_tueste,
-  precio: cafe.acf.precio,
-  imagen: cafe._embedded?.['wp:featuredmedia']?.[0]?.source_url
+  nombre: cafe.titulo,
+  origen: cafe.origen,
+  notas: cafe.notasDeCata,
+  tueste: normalizarTueste(cafe.nivelDeTueste),
+  precio: cafe.precio,
+  imagen: cafe.imagen || undefined
 }));
 ---
+
 
 <BaseLayout title="Catálogo | Tueste Norte">
   <section class="catalog-hero">

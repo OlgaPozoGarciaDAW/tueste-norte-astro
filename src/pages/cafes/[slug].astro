@@ -1,50 +1,68 @@
 
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getEntrada } from '../../lib/wp';
+import { getCafe } from '../../lib/wp';
+
+export const prerender = false;
 
 const slug = Astro.params.slug;
-const articulo = slug ? await getEntrada(slug) : undefined;
+const cafe = slug ? await getCafe(slug) : undefined;
 ---
 
-{articulo ? (
-  <BaseLayout title={`${articulo.titulo} | Tueste Norte`}>
-    <main class="article-detail">
-      <a href="/blog/" class="back-link">← Volver al blog</a>
+{cafe ? (
+  <BaseLayout title={`${cafe.titulo} | Tueste Norte`}>
+    <main class="cafe-detail">
+      <a href="/cafes" class="back-link">← Volver a nuestros cafés</a>
 
-      <article>
-        <p class="eyebrow">Nuestro blog</p>
+      <section class="cafe-content">
+        <div class="cafe-image">
+          {cafe.imagen && (
+            <img
+              src={cafe.imagen}
+              alt={cafe.textoAlternativo || `Café ${cafe.titulo}`}
+            />
+          )}
+        </div>
 
-        <h1>{articulo.titulo}</h1>
+        <div class="cafe-info">
+          <p class="eyebrow">Café de especialidad</p>
+          <h1>{cafe.titulo}</h1>
+          <p class="origin">{cafe.origen}</p>
 
-        <time datetime={articulo.fecha}>
-          {new Date(articulo.fecha).toLocaleDateString('es-ES')}
-        </time>
+          <div class="detail-item">
+            <h2>Notas de cata</h2>
+            <p>{cafe.notasDeCata}</p>
+          </div>
 
-        {articulo.imagen && (
-          <img
-            class="article-image"
-            src={articulo.imagen}
-            alt={articulo.textoAlternativo || articulo.titulo}
-          />
-        )}
+          <div class="detail-item">
+            <h2>Nivel de tueste</h2>
+            <p>{cafe.nivelDeTueste}</p>
+          </div>
 
-        <div class="article-content" set:html={articulo.contenido} />
-      </article>
+          <p class="price">
+            {cafe.precio.toFixed(2).replace('.', ',')} €
+          </p>
+        </div>
+      </section>
+
+      <section class="description">
+        <h2>Sobre este café</h2>
+        <div set:html={cafe.contenido} />
+      </section>
     </main>
   </BaseLayout>
 ) : (
-  <BaseLayout title="Artículo no encontrado | Tueste Norte">
+  <BaseLayout title="Café no encontrado | Tueste Norte">
     <main class="not-found">
-      <h1>Artículo no encontrado</h1>
-      <a href="/blog/">Volver al blog</a>
+      <h1>Café no encontrado</h1>
+      <a href="/cafes">Volver al catálogo</a>
     </main>
   </BaseLayout>
 )}
 
 <style>
-  .article-detail {
-    max-width: 900px;
+  .cafe-detail {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 48px 24px 80px;
   }
@@ -57,6 +75,20 @@ const articulo = slug ? await getEntrada(slug) : undefined;
     text-decoration: none;
   }
 
+  .cafe-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .cafe-image img {
+    display: block;
+    width: 100%;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+
   .eyebrow {
     color: #92400e;
     font-size: 13px;
@@ -65,35 +97,61 @@ const articulo = slug ? await getEntrada(slug) : undefined;
     text-transform: uppercase;
   }
 
-  h1 {
-    margin: 16px 0;
+  .cafe-info h1 {
+    margin: 12px 0;
     color: #292524;
-    font-size: clamp(34px, 5vw, 48px);
-    line-height: 1.2;
+    font-size: 42px;
   }
 
-  time {
-    color: #78716c;
-    font-size: 14px;
+  .origin {
+    margin-bottom: 32px;
+    color: #92400e;
+    font-weight: 600;
   }
 
-  .article-image {
-    display: block;
-    width: 100%;
-    max-height: 460px;
-    margin: 32px 0;
-    border-radius: 18px;
-    object-fit: cover;
+  .detail-item {
+    margin-bottom: 24px;
   }
 
-  .article-content {
+  .detail-item h2,
+  .description h2 {
+    margin-bottom: 8px;
+    color: #292524;
+    font-size: 21px;
+  }
+
+  .detail-item p,
+  .description {
     color: #57534e;
-    font-size: 17px;
-    line-height: 1.9;
+    line-height: 1.8;
+  }
+
+  .price {
+    margin-top: 28px;
+    color: #78350f;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .description {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid #e7e5e4;
   }
 
   .not-found {
     padding: 80px 24px;
     text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .cafe-content {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .cafe-info h1 {
+      font-size: 34px;
+    }
   }
 </style>

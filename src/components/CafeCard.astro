@@ -1,3 +1,4 @@
+
 ---
 interface Props {
   nombre: string;
@@ -11,9 +12,16 @@ interface Props {
 const { nombre, origen, notas, tueste, precio, imagen } = Astro.props;
 
 const imagenFinal = imagen ?? '/images/TuesteNorte.png';
+
+const slug = nombre
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '');
 ---
 
-<article class="cafe-card">
+<a class="cafe-card" href={`/cafes/${slug}`} aria-label={`Ver detalles del café ${nombre}`}>
   <div class="cafe-image">
     <img
       src={imagenFinal}
@@ -34,14 +42,17 @@ const imagenFinal = imagen ?? '/images/TuesteNorte.png';
       </span>
     </div>
   </div>
-</article>
+</a>
 
 <style>
   .cafe-card {
+    display: block;
     overflow: hidden;
     border: 1px solid #e7e5e4;
     border-radius: 18px;
     background: white;
+    text-decoration: none;
+    color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
