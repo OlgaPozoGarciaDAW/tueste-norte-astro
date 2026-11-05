@@ -1,73 +1,105 @@
 
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getEntradas, getEntrada } from '../../lib/wp';
+import { getEntrada } from '../../lib/wp';
 
-export async function getStaticPaths() {
-  const articulos = await getEntradas();
-
-  return articulos.map((articulo) => ({
-    params: { slug: articulo.slug },
-  }));
-}
+export const prerender = false;
 
 const slug = Astro.params.slug;
 const articulo = slug ? await getEntrada(slug) : undefined;
 
-const imagen = articulo?._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-const textoAlternativo = articulo?._embedded?.['wp:featuredmedia']?.[0]?.alt_text;
+const fecha = articulo
+  ? new Date(articulo.fecha).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+  : '';
 ---
 
 {articulo ? (
-  <BaseLayout title={`${articulo.title.rendered} | Tueste Norte`}>
-    <article class="mx-auto max-w-3xl px-6 py-16 md:py-20">
-      <a
-        href="/blog/"
-        class="mb-8 inline-flex font-semibold text-amber-900 hover:text-amber-700"
-      >
-        ← Volver al blog
-      </a>
+  <BaseLayout title={`${articulo.titulo} | Tueste Norte`}>
+    <main class="blog-detail">
+      <a href="/blog" class="back-link">← Volver al blog</a>
 
-      {imagen && (
-        <img
-          src={imagen}
-          alt={textoAlternativo || articulo.title.rendered}
-          class="mt-8 w-full rounded-2xl object-cover"
-        />
-      )}
+      <article>
+        {articulo.imagen && (
+          <img
+            class="blog-image"
+            src={articulo.imagen}
+            alt={articulo.textoAlternativo || articulo.titulo}
+          />
+        )}
 
-      <time
-        datetime={articulo.date}
-        class="mt-6 block text-sm text-stone-500"
-      >
-        {new Date(articulo.date).toLocaleDateString('es-ES')}
-      </time>
+        <p class="blog-date">{fecha}</p>
 
-      <h1
-        class="mt-4 text-4xl font-bold leading-tight text-stone-900 md:text-5xl"
-        set:html={articulo.title.rendered}
-      />
+        <h1>{articulo.titulo}</h1>
 
-      <div
-        class="mt-6 text-lg leading-8 text-stone-600"
-        set:html={articulo.excerpt.rendered}
-      />
+        <p class="blog-excerpt">{articulo.descripcion}</p>
 
-      <div
-        class="prose prose-stone mt-10 max-w-none leading-8"
-        set:html={articulo.content.rendered}
-      />
-    </article>
+        <div class="blog-content" set:html={articulo.contenido} />
+      </article>
+    </main>
   </BaseLayout>
 ) : (
   <BaseLayout title="Artículo no encontrado | Tueste Norte">
-    <main class="mx-auto max-w-3xl px-6 py-20 text-center">
-      <h1 class="text-3xl font-bold text-stone-900">
-        Artículo no encontrado
-      </h1>
-      <a href="/blog/" class="mt-6 inline-block font-semibold text-amber-900">
-        Volver al blog
-      </a>
+    <main class="not-found">
+      <h1>Artículo no encontrado</h1>
+      <a href="/blog">Volver al blog</a>
     </main>
   </BaseLayout>
 )}
+
+<style>
+  .blog-detail {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 32px;
+    color: #78350f;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .blog-image {
+    display: block;
+    width: 100%;
+    max-height: 450px;
+    margin-bottom: 32px;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+
+  .blog-date {
+    color: #92400e;
+    font-size: 14px;
+  }
+
+  h1 {
+    margin: 12px 0 20px;
+    color: #292524;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.2;
+  }
+
+  .blog-excerpt {
+    margin-bottom: 32px;
+    color: #57534e;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .blog-content {
+    color: #57534e;
+    line-height: 1.8;
+  }
+
+  .not-found {
+    padding: 80px 24px;
+    text-align: center;
+  }
+</style>

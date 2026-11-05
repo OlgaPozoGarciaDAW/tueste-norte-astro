@@ -1,7 +1,34 @@
 
 const API_URL = import.meta.env.WP_API_URL;
 
+// Tipos de los datos que utilizará nuestra web
 export interface Cafe {
+  id: number;
+  slug: string;
+  titulo: string;
+  contenido: string;
+  fecha: string;
+  origen: string;
+  notasDeCata: string;
+  nivelDeTueste: string;
+  precio: number;
+  imagen: string;
+  textoAlternativo: string;
+}
+
+export interface Entrada {
+  id: number;
+  slug: string;
+  titulo: string;
+  fecha: string;
+  descripcion: string;
+  contenido: string;
+  imagen: string;
+  textoAlternativo: string;
+}
+
+// Estructura original que devuelve WordPress para los cafés
+interface CafeWordPress {
   id: number;
   slug: string;
   title: { rendered: string };
@@ -13,7 +40,6 @@ export interface Cafe {
     nivel_de_tueste: string;
     precio: number;
   };
-  featured_media: number;
   _embedded?: {
     'wp:featuredmedia'?: {
       source_url: string;
@@ -22,16 +48,7 @@ export interface Cafe {
   };
 }
 
-export interface Entrada {
-  id: number;
-  slug: string;
-  titulo: string;
-  fecha: string;
-  descripcion: string;
-  imagen: string;
-  textoAlternativo: string;
-}
-
+// Estructura original que devuelve WordPress para las entradas
 interface EntradaWordPress {
   id: number;
   slug: string;
@@ -47,6 +64,41 @@ interface EntradaWordPress {
   };
 }
 
+// Transforma los datos originales de WordPress en datos sencillos
+function transformarCafe(cafe: CafeWordPress): Cafe {
+  const imagen = cafe._embedded?.['wp:featuredmedia']?.[0];
+
+  return {
+    id: cafe.id,
+    slug: cafe.slug,
+    titulo: cafe.title.rendered,
+    contenido: cafe.content.rendered,
+    fecha: cafe.date,
+    origen: cafe.acf.origen,
+    notasDeCata: cafe.acf.notas_de_cata,
+    nivelDeTueste: cafe.acf.nivel_de_tueste,
+    precio: Number(cafe.acf.precio),
+    imagen: imagen?.source_url || '',
+    textoAlternativo: imagen?.alt_text || ''
+  };
+}
+
+function transformarEntrada(entrada: EntradaWordPress): Entrada {
+  const imagen = entrada._embedded?.['wp:featuredmedia']?.[0];
+
+  return {
+    id: entrada.id,
+    slug: entrada.slug,
+    titulo: entrada.title.rendered,
+    fecha: entrada.date,
+    descripcion: entrada.excerpt.rendered.replace(/<[^>]*>/g, '').trim(),
+    contenido: entrada.content.rendered,
+    imagen: imagen?.source_url || '',
+    textoAlternativo: imagen?.alt_text || ''
+  };
+}
+
+// Obtener todos los cafés
 export async function getCafes(): Promise<Cafe[]> {
   const respuesta = await fetch(`${API_URL}/wp/v2/cafe?_embed`);
 
@@ -54,14 +106,18 @@ export async function getCafes(): Promise<Cafe[]> {
     throw new Error('Error al obtener los cafés de WordPress');
   }
 
-  return respuesta.json();
+  const cafes: CafeWordPress[] = await respuesta.json();
+
+  return cafes.map(transformarCafe);
 }
 
+// Obtener un café por su slug
 export async function getCafe(slug: string): Promise<Cafe | undefined> {
   const cafes = await getCafes();
   return cafes.find((cafe) => cafe.slug === slug);
 }
 
+// Obtener todas las entradas del blog
 export async function getEntradas(): Promise<Entrada[]> {
   const respuesta = await fetch(`${API_URL}/wp/v2/posts?_embed`);
 
@@ -71,22 +127,11 @@ export async function getEntradas(): Promise<Entrada[]> {
 
   const entradas: EntradaWordPress[] = await respuesta.json();
 
-  return entradas.map((entrada) => {
-    const imagen = entrada._embedded?.['wp:featuredmedia']?.[0];
-
-    return {
-      id: entrada.id,
-      slug: entrada.slug,
-      titulo: entrada.title.rendered,
-      fecha: entrada.date,
-      descripcion: entrada.excerpt.rendered.replace(/<[^>]*>/g, '').trim(),
-      imagen: imagen?.source_url || '',
-      textoAlternativo: imagen?.alt_text || ''
-    };
-  });
+  return entradas.map(transformarEntrada);
 }
 
-export async function getEntrada(slug: string): Promise<EntradaWordPress | undefined> {
+// Obtener una entrada por su slug
+export async function getEntrada(slug: string): Promise<Entrada | undefined> {
   const respuesta = await fetch(
     `${API_URL}/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`
   );
@@ -96,5 +141,8 @@ export async function getEntrada(slug: string): Promise<EntradaWordPress | undef
   }
 
   const entradas: EntradaWordPress[] = await respuesta.json();
-  return entradas[0];
+
+  return entradas.length > 0
+    ? transformarEntrada(entradas[0])
+    : undefined;
 }
